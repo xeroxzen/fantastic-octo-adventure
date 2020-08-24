@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 mongoose.connect("mongodb://localhost/test5", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  useFindAndModify: false,
 });
 
 const Todo = mongoose.model("Todo", {
@@ -27,6 +28,7 @@ const typeDefs = `
   type Mutation {
       createTodo(text: String!): Todo
       updateTodo(id: ID!, complete: Boolean!): Boolean
+      removeTodo(id: ID!): Boolean
   }
 `;
 
@@ -35,14 +37,23 @@ const resolvers = {
     hello: (_, { name }) => `Hello ${name || "World"}`,
     todos: () => Todo.find(),
   },
+  // All functions to exist in the todo have to exist inside a Mutation
   Mutation: {
+    //   Creating a new todo
     createTodo: async (_, { text }) => {
       const todo = new Todo({ text, complete: false });
       await todo.save();
       return todo;
     },
+    //   Updating a already existing todo by grabbing the ID and the complete property
     updateTodo: async (_, { id, complete }) => {
-      Todo.findByIdAndUpdate(id, { complete });
+      await Todo.findByIdAndUpdate(id, { complete });
+      return true;
+    },
+    // Removing a todo by attaching a ID
+    // What's the difference between Removing and Deleting
+    removeTodo: async (_, { id }) => {
+      await Todo.findByIdAndRemove(id);
       return true;
     },
   },
