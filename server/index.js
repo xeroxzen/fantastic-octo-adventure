@@ -27,8 +27,8 @@ const typeDefs = `
 
   type Mutation {
       createTodo(text: String!): Todo
-      updateTodo(id: ID!, complete: Boolean!): Boolean
       removeTodo(id: ID!): Boolean
+      updateTodo(id: ID!, complete: Boolean!): Boolean
   }
 `;
 
