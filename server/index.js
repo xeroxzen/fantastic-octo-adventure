@@ -29,6 +29,7 @@ const typeDefs = `
       createTodo(text: String!): Todo
       removeTodo(id: ID!): Boolean
       updateTodo(id: ID!, complete: Boolean!): Boolean
+      deleteTodo(id: ID!): Boolean
   }
 `;
 
@@ -54,6 +55,11 @@ const resolvers = {
     // What's the difference between Removing and Deleting
     removeTodo: async (_, { id }) => {
       await Todo.findByIdAndRemove(id);
+      return true;
+    },
+    // Deleting a Todo
+    deleteTodo: async (_, { id }) => {
+      await Todo.findByIdAndDelete(id);
       return true;
     },
   },
