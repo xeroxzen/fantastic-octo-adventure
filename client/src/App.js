@@ -22,7 +22,7 @@ const TodosQuery = gql`
 `;
 
 const UpdateMutation = gql`
-  mutation UpdateTodo($id: String!, complete: Boolean!){
+  mutation($id: String!, $complete: Boolean!) {
     updateTodo(id: $id, complete: $complete)
   }
 `;
@@ -31,14 +31,14 @@ class App extends Component {
   updateTodo = async (todo) => {
     //update todo
     await this.props.updateTodo({
-      variable: {
+      variables: {
         id: todo.id,
         complete: !todo.complete,
       },
     });
   };
 
-  removeTodo = (todo) => {
+  removeTodo = async (todo) => {
     //remove todo
   };
 
@@ -59,35 +59,35 @@ class App extends Component {
               {todos.map((todo) => {
                 const labelId = `checkbox-list-label-${todo}`;
 
-                return (
-                  <ListItem
-                    key={todo.id}
-                    role={undefined}
-                    dense
-                    button
-                    onClick={() => this.updateTodo(todo)}
-                  >
-                    <ListItemIcon>
-                      <Checkbox
-                        edge="start"
-                        checked={todo.complete}
-                        tabIndex={-1}
-                        disableRipple
-                        inputProps={{ "aria-labelledby": labelId }}
-                      />
-                    </ListItemIcon>
-                    <ListItemText id={labelId} primary={todo.text} />
-                    <ListItemSecondaryAction>
-                      <IconButton
-                        onClick={() => this.removeTodo(todo)}
-                        edge="end"
-                        aria-label="comments"
-                      >
-                        <CloseIcon />
-                      </IconButton>
-                    </ListItemSecondaryAction>
-                  </ListItem>
-                );
+                // return (
+                <ListItem
+                  key={todo.id}
+                  role={undefined}
+                  dense
+                  button
+                  onClick={() => this.updateTodo(todo)}
+                >
+                  <ListItemIcon>
+                    <Checkbox
+                      edge="start"
+                      checked={todo.complete}
+                      tabIndex={-1}
+                      disableRipple
+                      inputProps={{ "aria-labelledby": labelId }}
+                    />
+                  </ListItemIcon>
+                  <ListItemText id={labelId} primary={todo.text} />
+                  <ListItemSecondaryAction>
+                    <IconButton
+                      onClick={() => this.removeTodo(todo)}
+                      edge="end"
+                      aria-label="comments"
+                    >
+                      <CloseIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                </ListItem>;
+                // );
               })}
             </List>
           </Paper>
